@@ -9,6 +9,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand/v2"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -23,7 +24,15 @@ func TestConcurrency(t *testing.T, ctor func(uint) workqueue.Interface) {
 		t.Fatal("NewWorkQueue returned nil")
 	}
 
+	inflight := int32(0)
+
 	var cb dispatcher.Callback = func(ctx context.Context, key string) error {
+		new := atomic.AddInt32(&inflight, 1)
+		defer atomic.AddInt32(&inflight, -1)
+		if new > 5 {
+			t.Errorf("Too many inflight: %d", new)
+		}
+
 		t.Logf("Processing %q", key)
 		// This is intentionally much longer than the tick below, to ensure that
 		// we handle multiple concurrent dispatch invocations.
