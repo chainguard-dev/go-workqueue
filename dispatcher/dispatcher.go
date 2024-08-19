@@ -20,7 +20,7 @@ type Callback func(ctx context.Context, key string) error
 
 // Handle performs a single iteration of the dispatcher, possibly invoking
 // the callback for several different keys.
-func Handle(ctx context.Context, wq workqueue.Interface, N uint, f Callback) error {
+func Handle(ctx context.Context, wq workqueue.Interface, concurrency uint, f Callback) error {
 	// Enumerate the state of the queue.
 	wip, next, err := wq.Enumerate(ctx)
 	if err != nil {
@@ -41,7 +41,7 @@ func Handle(ctx context.Context, wq workqueue.Interface, N uint, f Callback) err
 
 	// Attempt to launch a new piece of work for each open slot we have available
 	// which is: N - active.
-	openSlots := N - uint(len(activeKeys))
+	openSlots := concurrency - uint(len(activeKeys))
 	idx, launched := 0, uint(0)
 	eg := errgroup.Group{}
 	for ; idx < len(next) && launched < openSlots; idx++ {

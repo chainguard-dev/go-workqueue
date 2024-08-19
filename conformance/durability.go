@@ -79,5 +79,4 @@ func TestDurability(t *testing.T, ctor func(uint) workqueue.Interface) {
 			t.Fatalf("Drain failed: %v", err)
 		}
 	}
-
 }
