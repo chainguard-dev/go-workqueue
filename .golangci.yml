@@ -1,0 +1,50 @@
+linters-settings:
+  depguard:
+    include-go-root: true
+    packages:
+      - io/ioutil
+    packages-with-error-message:
+      - io/ioutil: 'ioutil was deprecated in 1.16 (https://go.dev/doc/go1.16#ioutil)'
+  forbidigo:
+    forbid:
+      - ^print.*$
+  goheader:
+    template-path: header.tmpl
+    values:
+      regexp:
+        ws: "\\s*"
+  goimports:
+    local-prefixes: github.com/mattmoor/go-workqueue
+
+linters:
+  enable:
+  - asciicheck
+  - errcheck
+  - errorlint
+  - forbidigo
+  - gofmt
+  - goimports
+  - gosec
+  - gocritic
+  - importas
+  - prealloc
+  - misspell
+  - stylecheck
+  - tparallel
+  - unconvert
+  - unparam
+  - unused
+  - whitespace
+output:
+  uniq-by-line: false
+issues:
+  exclude-rules:
+  - path: _test\.go
+    linters:
+    - errcheck
+    - gosec
+  max-issues-per-linter: 0
+  max-same-issues: 0
+run:
+  issues-exit-code: 1
+  timeout: 10m

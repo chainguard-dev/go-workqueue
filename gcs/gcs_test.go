@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"cloud.google.com/go/storage"
+
 	"github.com/mattmoor/go-workqueue"
 	"github.com/mattmoor/go-workqueue/conformance"
 )

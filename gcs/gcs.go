@@ -18,9 +18,10 @@ import (
 
 	"cloud.google.com/go/storage"
 	"github.com/chainguard-dev/clog"
-	"github.com/mattmoor/go-workqueue"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
+
+	"github.com/mattmoor/go-workqueue"
 )
 
 // ClientInterface is an interface that abstracts the GCS client.
@@ -106,7 +107,7 @@ func (w *wq) Enumerate(ctx context.Context) ([]workqueue.ObservedInProgressKey, 
 
 	for {
 		objAttrs, err := iter.Next()
-		if err == iterator.Done {
+		if errors.Is(err, iterator.Done) {
 			break
 		} else if err != nil {
 			return nil, nil, fmt.Errorf("Next() = %w", err)

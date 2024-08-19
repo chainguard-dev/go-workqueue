@@ -7,15 +7,16 @@ package conformance
 
 import (
 	"context"
-	"fmt"
-	"math/rand/v2"
+	"crypto/rand"
+	"math/big"
 	"sync/atomic"
 	"testing"
 	"time"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/mattmoor/go-workqueue"
 	"github.com/mattmoor/go-workqueue/dispatcher"
-	"golang.org/x/sync/errgroup"
 )
 
 func TestConcurrency(t *testing.T, ctor func(uint) workqueue.Interface) {
@@ -69,8 +70,12 @@ func TestConcurrency(t *testing.T, ctor func(uint) workqueue.Interface) {
 	})
 
 	for i := 0; i < 1000; i++ {
-		key := fmt.Sprint(rand.IntN(40))
-		if err := wq.Queue(ctx, key); err != nil {
+		bi, err := rand.Int(rand.Reader, big.NewInt(40))
+		if err != nil {
+			t.Fatalf("Failed to generate random number: %v", err)
+		}
+
+		if err := wq.Queue(ctx, bi.String()); err != nil {
 			t.Fatalf("Queue failed: %v", err)
 		}
 		time.Sleep(10 * time.Millisecond)

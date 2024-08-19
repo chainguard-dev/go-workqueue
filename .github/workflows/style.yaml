@@ -1,0 +1,142 @@
+# Copyright 2021 Chainguard, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+name: Code Style
+
+on:
+  pull_request:
+    branches: [ 'main', 'release-*' ]
+  push:
+    branches: [ 'main', 'release-*' ]
+
+permissions:
+  contents: read
+
+jobs:
+
+  gofmt:
+    permissions:
+      contents: read
+    timeout-minutes: 15
+
+    name: check gofmt
+    runs-on: ubuntu-latest
+    steps:
+      # TODO(mattmoor): Enable if we repo-transfer this.
+      # - uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
+      #   with:
+      #     egress-policy: audit
+
+      - name: Check out code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Set up Go
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      - uses: chainguard-dev/actions/gofmt@7071df0659dbd4a79804731f0da2d0f1dba0b356 # main
+        with:
+          args: -s
+
+  goimports:
+    permissions:
+      contents: read
+    timeout-minutes: 15
+
+    name: check goimports
+    runs-on: ubuntu-latest
+    steps:
+      # TODO(mattmoor): Enable if we repo-transfer this.
+      # - uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
+      #   with:
+      #     egress-policy: audit
+
+      - name: Check out code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Set up Go
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      - uses: chainguard-dev/actions/goimports@7071df0659dbd4a79804731f0da2d0f1dba0b356 # main
+
+  golangci-lint:
+    permissions:
+      contents: read
+    timeout-minutes: 15
+
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v2.2.0
+        with:
+          go-version-file: 'go.mod'
+          check-latest: true
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@aaa42aa0628b4ae2578232a66b541047968fac86 # v6.1.0
+        timeout-minutes: 5
+        with:
+          version: v1.60.1
+
+  lint:
+    permissions:
+      contents: read
+    timeout-minutes: 5
+
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      # TODO(mattmoor): Enable if we repo-transfer this.
+      # - uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
+      #   with:
+      #     egress-policy: audit
+
+      - name: Check out code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Set up Go
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      - uses: chainguard-dev/actions/trailing-space@7071df0659dbd4a79804731f0da2d0f1dba0b356 # main
+        if: ${{ always() }}
+
+      - uses: chainguard-dev/actions/eof-newline@9d943fc9889a0c0795e3c2bd4b949a9b610ac02e # main
+        if: ${{ always() }}
+
+      - uses: reviewdog/action-tflint@0a8c6a4cc8788c02fe181ea6b8530975688f1a33 # v1.23.2
+        if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: true
+          tflint_version: v0.52.0
+
+      - uses: reviewdog/action-misspell@ef8b22c1cca06c8d306fc6be302c3dab0f6ca12f # v1.23.0
+        if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: true
+          locale: "US"
+          exclude: |
+            **/go.sum
+            **/third_party/**
+            **/console-ui/import/**
+            **/cyclonedx.json
+            ./*.yml
+          ignore: cancelled,cancelling,mosquitto,Organisation
+
+      - uses: get-woke/woke-action-reviewdog@d71fd0115146a01c3181439ce714e21a69d75e31 # v0
+        if: ${{ always() }}
+        with:
+          github-token: ${{ secrets.github_token }}
+          reporter: github-pr-check
+          level: error
+          fail-on-error: true
