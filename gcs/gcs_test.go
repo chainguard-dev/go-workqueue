@@ -16,13 +16,14 @@ import (
 )
 
 func TestWorkQueue(t *testing.T) {
-	client, err := storage.NewClient(context.Background())
-	if err != nil {
-		t.Fatalf("Failed to create client: %v", err)
-	}
 	bucket, ok := os.LookupEnv("WORKQUEUE_GCS_TEST_BUCKET")
 	if !ok {
 		t.Skip("WORKQUEUE_GCS_TEST_BUCKET not set")
+	}
+
+	client, err := storage.NewClient(context.Background())
+	if err != nil {
+		t.Fatalf("Failed to create client: %v", err)
 	}
 
 	conformance.TestSemantics(t, func(u uint) workqueue.Interface {
