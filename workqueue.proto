@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+// This is actually github.com/mattmoor/go-workqueue but the codegen
+// doesn't translate properly.
+option go_package = "github.com/mattmoor/workqueue";
+
+package chainguard.workqueue;
+
+service WorkqueueService {
+  rpc Process(ProcessRequest) returns (ProcessResponse) {}
+}
+
+message ProcessRequest {
+  string key = 1;
+}
+
+message ProcessResponse {}

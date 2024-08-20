@@ -18,6 +18,16 @@ import (
 // Callback is the function that Handle calls to process a particular key.
 type Callback func(ctx context.Context, key string) error
 
+// ServiceCallback returns a Callback that invokes the given service.
+func ServiceCallback(client workqueue.WorkqueueServiceClient) Callback {
+	return func(ctx context.Context, key string) error {
+		_, err := client.Process(ctx, &workqueue.ProcessRequest{
+			Key: key,
+		})
+		return err
+	}
+}
+
 // Handle performs a single iteration of the dispatcher, possibly invoking
 // the callback for several different keys.
 func Handle(ctx context.Context, wq workqueue.Interface, concurrency uint, f Callback) error {
@@ -62,7 +72,7 @@ func Handle(ctx context.Context, wq workqueue.Interface, concurrency uint, f Cal
 		// the work, then someone beat us to it, so move on to the next key.
 		oip, err := nextKey.Start(ctx)
 		if err != nil {
-			clog.WarnContextf(ctx, "Failed to start key %q: %v", nextKey.Name(), err)
+			clog.DebugContextf(ctx, "Failed to start key %q: %v", nextKey.Name(), err)
 			continue
 		}
 
