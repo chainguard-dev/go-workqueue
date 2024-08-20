@@ -68,16 +68,16 @@ func Handle(ctx context.Context, wq workqueue.Interface, concurrency uint, f Cal
 		// By incrementing the counter here, we ensure we don't overlaunch keys due to a race.
 		launched++
 
-		// Start the work, moving it to be in-progress. If we are unsuccessful starting
-		// the work, then someone beat us to it, so move on to the next key.
-		oip, err := nextKey.Start(ctx)
-		if err != nil {
-			clog.DebugContextf(ctx, "Failed to start key %q: %v", nextKey.Name(), err)
-			continue
-		}
-
 		// This is done in a Go routine so that we can process keys concurrently.
 		eg.Go(func() error {
+			// Start the work, moving it to be in-progress. If we are unsuccessful starting
+			// the work, then someone beat us to it, so move on to the next key.
+			oip, err := nextKey.Start(ctx)
+			if err != nil {
+				clog.DebugContextf(ctx, "Failed to start key %q: %v", nextKey.Name(), err)
+				return nil
+			}
+
 			// Attempt to perform the actual reconciler invocation.
 			if err := f(ctx, oip.Name()); err != nil {
 				clog.WarnContextf(ctx, "Failed callback for key %q: %v", oip.Name(), err)
