@@ -18,6 +18,7 @@ import (
 
 	"cloud.google.com/go/storage"
 	"github.com/chainguard-dev/clog"
+	"github.com/prometheus/client_golang/prometheus"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 
@@ -105,6 +106,7 @@ func (w *wq) Enumerate(ctx context.Context) ([]workqueue.ObservedInProgressKey, 
 	wip := make([]workqueue.ObservedInProgressKey, 0, w.limit)
 	qd := make([]*storage.ObjectAttrs, 0, w.limit+1)
 
+	queued := 0
 	for {
 		objAttrs, err := iter.Next()
 		if errors.Is(err, iterator.Done) {
@@ -128,6 +130,7 @@ func (w *wq) Enumerate(ctx context.Context) ([]workqueue.ObservedInProgressKey, 
 			if len(qd) > int(w.limit) {
 				qd = qd[:w.limit]
 			}
+			queued++
 		}
 	}
 
@@ -138,6 +141,9 @@ func (w *wq) Enumerate(ctx context.Context) ([]workqueue.ObservedInProgressKey, 
 			attrs:  objAttrs,
 		})
 	}
+
+	mInProgressKeys.With(prometheus.Labels{}).Set(float64(len(wip)))
+	mQueuedKeys.With(prometheus.Labels{}).Set(float64(queued))
 	return wip, qk, nil
 }
 

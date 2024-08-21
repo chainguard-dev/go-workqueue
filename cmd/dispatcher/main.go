@@ -19,6 +19,7 @@ import (
 	delegate "chainguard.dev/go-grpc-kit/pkg/options"
 	"cloud.google.com/go/storage"
 	"github.com/chainguard-dev/clog"
+	"github.com/chainguard-dev/terraform-infra-common/pkg/httpmetrics"
 	"github.com/sethvargo/go-envconfig"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -47,6 +48,8 @@ func main() {
 
 	var env envConfig
 	envconfig.MustProcess(ctx, &env)
+
+	go httpmetrics.ServeMetrics()
 
 	var wq workqueue.Interface
 	switch env.Mode {
