@@ -21,7 +21,7 @@ var (
 	mQueuedKeys = promauto.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: "workqueue_queued_keys",
-			Help: "The number of keys currently in the backlow of this workqueue.",
+			Help: "The number of keys currently in the backlog of this workqueue.",
 		},
 		[]string{},
 	)
