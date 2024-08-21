@@ -95,7 +95,7 @@ func Handle(ctx context.Context, wq workqueue.Interface, concurrency uint, f Cal
 			return nil
 		})
 	}
-	clog.InfoContextf(ctx, "Launched %d new keys", launched)
+	clog.InfoContextf(ctx, "Launched %d new keys (wip: %d)", launched, len(activeKeys))
 
 	// Wait for all of the in-progress invocations to complete.
 	return eg.Wait()

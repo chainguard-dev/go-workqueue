@@ -88,8 +88,7 @@ func main() {
 
 	// On any HTTP activity, invoke the dispatcher.
 	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		err := dispatcher.Handle(ctx, wq, env.Concurrency, dispatcher.ServiceCallback(client))
-		if err != nil {
+		if err := dispatcher.Handle(ctx, wq, env.Concurrency, dispatcher.ServiceCallback(client)); err != nil {
 			log.Printf("Failed to handle: %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
