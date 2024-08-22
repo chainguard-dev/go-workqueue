@@ -125,6 +125,9 @@ func (w *wq) Enumerate(ctx context.Context) ([]workqueue.ObservedInProgressKey, 
 		case strings.HasPrefix(objAttrs.Name, queuedPrefix):
 			qd = append(qd, objAttrs)
 			sort.Slice(qd, func(i, j int) bool {
+				if qd[i].Created.Equal(qd[j].Created) {
+					return qd[i].Name < qd[j].Name
+				}
 				return qd[i].Created.Before(qd[j].Created)
 			})
 			if len(qd) > int(w.limit) {

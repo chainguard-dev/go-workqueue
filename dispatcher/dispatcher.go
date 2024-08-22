@@ -49,9 +49,18 @@ func Handle(ctx context.Context, wq workqueue.Interface, concurrency uint, f Cal
 		}
 	}
 
+	// If our open slots are filled, then we can't launch any new work!
+	// We explicitly check this here because if nWIP grows larger than
+	// concurrency then the subtraction below will underflow and we'll
+	// start to queue work without bounds.
+	nWIP := uint(len(activeKeys))
+	if nWIP >= concurrency {
+		return nil
+	}
+
 	// Attempt to launch a new piece of work for each open slot we have available
 	// which is: N - active.
-	openSlots := concurrency - uint(len(activeKeys))
+	openSlots := concurrency - nWIP
 	idx, launched := 0, uint(0)
 	eg := errgroup.Group{}
 	for ; idx < len(next) && launched < openSlots; idx++ {
@@ -95,7 +104,7 @@ func Handle(ctx context.Context, wq workqueue.Interface, concurrency uint, f Cal
 			return nil
 		})
 	}
-	clog.InfoContextf(ctx, "Launched %d new keys (wip: %d)", launched, len(activeKeys))
+	clog.InfoContextf(ctx, "Launched %d new keys (wip: %d)", launched, nWIP)
 
 	// Wait for all of the in-progress invocations to complete.
 	return eg.Wait()
