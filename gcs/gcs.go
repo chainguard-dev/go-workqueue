@@ -142,8 +142,14 @@ func (w *wq) Enumerate(ctx context.Context) ([]workqueue.ObservedInProgressKey, 
 		})
 	}
 
-	mInProgressKeys.With(prometheus.Labels{}).Set(float64(len(wip)))
-	mQueuedKeys.With(prometheus.Labels{}).Set(float64(queued))
+	mInProgressKeys.With(prometheus.Labels{
+		"service_name":  env.KnativeServiceName,
+		"revision_name": env.KnativeRevisionName,
+	}).Set(float64(len(wip)))
+	mQueuedKeys.With(prometheus.Labels{
+		"service_name":  env.KnativeServiceName,
+		"revision_name": env.KnativeRevisionName,
+	}).Set(float64(queued))
 	return wip, qk, nil
 }
 
