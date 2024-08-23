@@ -13,6 +13,7 @@ import (
 	"chainguard.dev/go-grpc-kit/pkg/duplex"
 	"cloud.google.com/go/storage"
 	"github.com/chainguard-dev/clog"
+	"github.com/chainguard-dev/terraform-infra-common/pkg/httpmetrics"
 	"github.com/sethvargo/go-envconfig"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -37,6 +38,8 @@ func main() {
 
 	var env envConfig
 	envconfig.MustProcess(ctx, &env)
+
+	go httpmetrics.ServeMetrics()
 
 	d := duplex.New(
 		env.Port,

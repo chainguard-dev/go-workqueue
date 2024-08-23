@@ -37,4 +37,18 @@ var (
 		},
 		[]string{"service_name", "revision_name"},
 	)
+	mAddedKeys = promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "workqueue_added_keys",
+			Help: "The total number of queue requests.",
+		},
+		[]string{"service_name", "revision_name"},
+	)
+	mDedupedKeys = promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "workqueue_deduped_keys",
+			Help: "The total number of keys that were deduped.",
+		},
+		[]string{"service_name", "revision_name"},
+	)
 )

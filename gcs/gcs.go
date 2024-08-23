@@ -70,6 +70,10 @@ func (w *wq) Queue(ctx context.Context, key string) error {
 	writer.Metadata = map[string]string{
 		// TODO(nghia): Extract and persist things like trace headers here.
 	}
+	mAddedKeys.With(prometheus.Labels{
+		"service_name":  env.KnativeServiceName,
+		"revision_name": env.KnativeRevisionName,
+	}).Add(1)
 
 	if _, err := writer.Write([]byte("")); err != nil {
 		return fmt.Errorf("Write() = %w", err)
@@ -78,7 +82,10 @@ func (w *wq) Queue(ctx context.Context, key string) error {
 		return fmt.Errorf("Close() = %w", err)
 	} else if exists {
 		clog.DebugContextf(ctx, "Key %q already exists", key)
-		// TODO(mattmoor): Surface a matric for this.
+		mDedupedKeys.With(prometheus.Labels{
+			"service_name":  env.KnativeServiceName,
+			"revision_name": env.KnativeRevisionName,
+		}).Add(1)
 	}
 	return nil
 }
