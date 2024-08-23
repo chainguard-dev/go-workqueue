@@ -51,6 +51,40 @@ module "work-queued" {
   primary_reduce  = "REDUCE_MAX"
 }
 
+module "work-added" {
+  source  = "chainguard-dev/common/infra//modules/dashboard/widgets/xy"
+  version = "0.6.65"
+
+  title  = "Work Added"
+  filter = [
+    "resource.type=\"prometheus_target\"",
+    "metric.type=\"prometheus.googleapis.com/workqueue_added_keys_total/counter\"",
+    "metric.label.\"service_name\"=\"${var.name}-rcv\"",
+  ]
+  group_by_fields = ["metric.label.\"service_name\""]
+  primary_align    = "ALIGN_RATE"
+  primary_reduce   = "REDUCE_NONE"
+  secondary_align  = "ALIGN_NONE"
+  secondary_reduce = "REDUCE_SUM"
+}
+
+module "work-deduped" {
+  source  = "chainguard-dev/common/infra//modules/dashboard/widgets/xy"
+  version = "0.6.65"
+
+  title  = "Work Deduplicated"
+  filter = [
+    "resource.type=\"prometheus_target\"",
+    "metric.type=\"prometheus.googleapis.com/workqueue_deduped_keys_total/counter\"",
+    "metric.label.\"service_name\"=\"${var.name}-rcv\"",
+  ]
+  group_by_fields = ["metric.label.\"service_name\""]
+  primary_align    = "ALIGN_RATE"
+  primary_reduce   = "REDUCE_NONE"
+  secondary_align  = "ALIGN_NONE"
+  secondary_reduce = "REDUCE_SUM"
+}
+
 locals {
   columns = 2
   unit    = module.width.size / local.columns
@@ -59,12 +93,13 @@ locals {
   // N columns, unit width each  ([0, unit, 2 * unit, ...])
   col = range(0, local.columns * local.unit, local.unit)
 
-  tiles = [{
-    yPos   = 0,
-    xPos   = local.col[0],
-    height = local.unit,
-    width  = local.unit,
-    widget = module.work-in-progress.widget,
+  tiles = [
+    {
+      yPos   = 0,
+      xPos   = local.col[0],
+      height = local.unit,
+      width  = local.unit,
+      widget = module.work-in-progress.widget,
     },
     {
       yPos   = 0,
@@ -72,7 +107,22 @@ locals {
       height = local.unit,
       width  = local.unit,
       widget = module.work-queued.widget,
-  }]
+    },
+    {
+      yPos   = local.unit,
+      xPos   = local.col[0],
+      height = local.unit,
+      width  = local.unit,
+      widget = module.work-added.widget,
+    },
+    {
+      yPos   = local.unit,
+      xPos   = local.col[1],
+      height = local.unit,
+      width  = local.unit,
+      widget = module.work-deduped.widget,
+    },
+  ]
 }
 
 module "collapsible" {
