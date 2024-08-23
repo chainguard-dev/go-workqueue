@@ -3,8 +3,6 @@ module "width" {
   version = "0.6.65"
 }
 
-// TODO: workqueue metrics.
-
 module "receiver-logs" {
   source  = "chainguard-dev/common/infra//modules/dashboard/sections/logs"
   version = "0.6.65"
@@ -50,8 +48,8 @@ module "work-queued" {
     "metric.label.\"service_name\"=\"${var.name}-dsp\"",
   ]
   group_by_fields = ["metric.label.\"service_name\""]
-  primary_align   = "ALIGN_MAX"
-  primary_reduce  = "REDUCE_MAX"
+  primary_align   = "ALIGN_MEAN"
+  primary_reduce  = "REDUCE_MEAN"
 }
 
 module "work-added" {
