@@ -238,6 +238,12 @@ func (o *inProgressKey) Complete(ctx context.Context) error {
 	o.ownerCancel()
 	o.rw.RLock()
 	defer o.rw.RUnlock()
+
+	mWorkLatency.With(prometheus.Labels{
+		"service_name":  env.KnativeServiceName,
+		"revision_name": env.KnativeRevisionName,
+	}).Observe(time.Now().UTC().Sub(o.attrs.Created).Seconds())
+
 	return o.client.Object(o.attrs.Name).Delete(ctx)
 }
 
@@ -311,6 +317,11 @@ func (q *queuedKey) Start(ctx context.Context) (workqueue.OwnedInProgressKey, er
 	srcObject := q.attrs.Name
 	key := strings.TrimPrefix(srcObject, queuedPrefix)
 	targetObject := fmt.Sprintf("%s%s", inProgressPrefix, key)
+
+	mWaitLatency.With(prometheus.Labels{
+		"service_name":  env.KnativeServiceName,
+		"revision_name": env.KnativeRevisionName,
+	}).Observe(time.Now().UTC().Sub(q.attrs.Created).Seconds())
 
 	// Create a copier to copy the source object, and then we will delete it
 	// upon success.

@@ -37,6 +37,22 @@ var (
 		},
 		[]string{"service_name", "revision_name"},
 	)
+	mWorkLatency = promauto.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "workqueue_process_latency_seconds",
+			Help:    "The duration taken to process a key.",
+			Buckets: []float64{.25, .5, 1, 2.5, 5, 10, 20, 30, 45, 60, 120, 240, 480, 960},
+		},
+		[]string{"service_name", "revision_name"},
+	)
+	mWaitLatency = promauto.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "workqueue_wait_latency_seconds",
+			Help:    "The duration the key waited to start.",
+			Buckets: []float64{.25, .5, 1, 2.5, 5, 10, 20, 30, 45, 60, 120, 240, 480, 960},
+		},
+		[]string{"service_name", "revision_name"},
+	)
 	mAddedKeys = promauto.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "workqueue_added_keys",
