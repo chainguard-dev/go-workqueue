@@ -47,7 +47,7 @@ func main() {
 	client := workqueue.NewWorkqueueServiceClient(conn)
 
 	eg := errgroup.Group{}
-	eg.SetLimit(runtime.GOMAXPROCS(0))
+	eg.SetLimit(5 * runtime.GOMAXPROCS(0))
 	for i := 0; i < *requests; i++ {
 		i := i
 		eg.Go(func() error {

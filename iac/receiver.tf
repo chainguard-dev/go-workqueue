@@ -31,6 +31,12 @@ module "receiver-service" {
         working_dir = path.module
         importpath  = "github.com/mattmoor/go-workqueue/cmd/receiver"
       }
+      resources = {
+        limits = {
+          memory = "4Gi"
+          cpu    = "1000m"
+        }
+      }
       ports = [{ container_port = 8080 }]
       env = [
         {

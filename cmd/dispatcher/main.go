@@ -60,6 +60,24 @@ func main() {
 		}
 		wq = gcs.NewWorkQueue(cl.Bucket(env.Bucket), env.Concurrency)
 
+		// Launch a go routine in the background to periodically call Enumerate
+		// to ensure that each replica surfaces the latest and greatest metrics
+		// even if the worker isn't being invoked for fresh work.
+		go func() {
+			tick := time.NewTicker(30 * time.Second)
+			for {
+				select {
+				case <-ctx.Done():
+					return
+				case <-tick.C:
+					_, _, err := wq.Enumerate(ctx)
+					if err != nil {
+						log.Printf("Failed to enumerate: %v", err)
+					}
+				}
+			}
+		}()
+
 	default:
 		log.Panicf("Unsupported mode: %q", env.Mode)
 	}
@@ -89,15 +107,7 @@ func main() {
 	defer conn.Close()
 	client := workqueue.NewWorkqueueServiceClient(conn)
 
-	// On any HTTP activity, invoke the dispatcher.
-	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if err := dispatcher.Handle(ctx, wq, env.Concurrency, dispatcher.ServiceCallback(client)); err != nil {
-			log.Printf("Failed to handle: %v", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.WriteHeader(http.StatusOK)
-	})
+	h := dispatcher.Handler(wq, env.Concurrency, dispatcher.ServiceCallback(client))
 	srv := &http.Server{
 		Addr:              fmt.Sprintf(":%d", env.Port),
 		Handler:           h2c.NewHandler(h, &http2.Server{}),
