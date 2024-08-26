@@ -225,7 +225,7 @@ func TestSemantics(t *testing.T, ctor func(uint) workqueue.Interface) {
 	if want, got := "bar", qd[0].Name(); want != got {
 		t.Errorf("Expected first queued key to be %q, got %q", want, got)
 	}
-	// The remaining 4 heys should be key-0 through key-3
+	// The remaining 4 keys should be key-0 through key-3
 	for i := 0; i < 4; i++ {
 		if want, got := fmt.Sprintf("key-%d", i), qd[i+1].Name(); want != got {
 			t.Errorf("Expected queued key %d to be %q, got %q", i, want, got)
