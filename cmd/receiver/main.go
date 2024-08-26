@@ -20,8 +20,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 
-	"github.com/mattmoor/go-workqueue"
-	"github.com/mattmoor/go-workqueue/gcs"
+	"github.com/chainguard-dev/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue/gcs"
 )
 
 type envConfig struct {

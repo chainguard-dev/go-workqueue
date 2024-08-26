@@ -8,7 +8,7 @@ package inmem
 import (
 	"testing"
 
-	"github.com/mattmoor/go-workqueue/conformance"
+	"github.com/chainguard-dev/go-workqueue/conformance"
 )
 
 func TestWorkQueue(t *testing.T) {

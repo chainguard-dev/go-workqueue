@@ -12,7 +12,7 @@ import (
 	"github.com/chainguard-dev/clog"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/mattmoor/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue"
 )
 
 // Callback is the function that Handle calls to process a particular key.

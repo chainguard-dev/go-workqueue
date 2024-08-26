@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/mattmoor/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue"
 )
 
 func Handler(wq workqueue.Interface, concurrency uint, f Callback) http.Handler {

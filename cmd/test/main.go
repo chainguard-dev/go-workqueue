@@ -14,9 +14,9 @@ import (
 
 	"cloud.google.com/go/storage"
 
-	"github.com/mattmoor/go-workqueue"
-	gcswq "github.com/mattmoor/go-workqueue/gcs"
-	"github.com/mattmoor/go-workqueue/inmem"
+	"github.com/chainguard-dev/go-workqueue"
+	gcswq "github.com/chainguard-dev/go-workqueue/gcs"
+	"github.com/chainguard-dev/go-workqueue/inmem"
 )
 
 func main() {

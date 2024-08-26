@@ -46,7 +46,7 @@ module "dispatcher-service" {
     "dispatcher" = {
       source = {
         working_dir = path.module
-        importpath  = "github.com/mattmoor/go-workqueue/cmd/dispatcher"
+        importpath  = "github.com/chainguard-dev/go-workqueue/cmd/dispatcher"
       }
       ports = [{
         name = "h2c"

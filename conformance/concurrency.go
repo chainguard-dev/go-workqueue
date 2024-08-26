@@ -15,8 +15,8 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/mattmoor/go-workqueue"
-	"github.com/mattmoor/go-workqueue/dispatcher"
+	"github.com/chainguard-dev/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue/dispatcher"
 )
 
 func TestConcurrency(t *testing.T, ctor func(uint) workqueue.Interface) {

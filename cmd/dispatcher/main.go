@@ -21,9 +21,9 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/mattmoor/go-workqueue"
-	"github.com/mattmoor/go-workqueue/dispatcher"
-	"github.com/mattmoor/go-workqueue/gcs"
+	"github.com/chainguard-dev/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue/dispatcher"
+	"github.com/chainguard-dev/go-workqueue/gcs"
 )
 
 type envConfig struct {
