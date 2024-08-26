@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-// This is actually github.com/mattmoor/go-workqueue but the codegen
+// This is actually github.com/chainguard-dev/go-workqueue but the codegen
 // doesn't translate properly.
-option go_package = "github.com/mattmoor/workqueue";
+option go_package = "github.com/chainguard-dev/workqueue";
 
 package chainguard.workqueue;
 

@@ -12,8 +12,8 @@ import (
 
 	"cloud.google.com/go/storage"
 
-	"github.com/mattmoor/go-workqueue"
-	"github.com/mattmoor/go-workqueue/conformance"
+	"github.com/chainguard-dev/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue/conformance"
 )
 
 func TestWorkQueue(t *testing.T) {

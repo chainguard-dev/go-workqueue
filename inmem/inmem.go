@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mattmoor/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue"
 )
 
 // NewWorkQueue creates a new in-memory workqueue.

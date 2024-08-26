@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mattmoor/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue"
 )
 
 func TestSemantics(t *testing.T, ctor func(uint) workqueue.Interface) {

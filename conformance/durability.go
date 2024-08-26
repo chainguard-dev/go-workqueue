@@ -9,7 +9,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/mattmoor/go-workqueue"
+	"github.com/chainguard-dev/go-workqueue"
 )
 
 // Unlike the other tests, this one is only expected for implementations that

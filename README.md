@@ -24,7 +24,7 @@ func foo(ctx context.Context, wq workqueue.Interface) error {
 
 Up to `N` items of concurrent work may be processed from the workqueue by
 invoking the `Handle` method in the
-`github.com/mattmoor/go-workqueue/dispatcher` package.  For example:
+`github.com/chainguard-dev/go-workqueue/dispatcher` package.  For example:
 
 ```go
 

@@ -14,7 +14,7 @@ linters-settings:
       regexp:
         ws: "\\s*"
   goimports:
-    local-prefixes: github.com/mattmoor/go-workqueue
+    local-prefixes: github.com/chainguard-dev/go-workqueue
 
 linters:
   enable:

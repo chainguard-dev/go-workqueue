@@ -1,4 +1,4 @@
-module github.com/mattmoor/go-workqueue
+module github.com/chainguard-dev/go-workqueue
 
 go 1.23.0
 

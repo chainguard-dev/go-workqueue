@@ -29,7 +29,7 @@ module "receiver-service" {
     "receiver" = {
       source = {
         working_dir = path.module
-        importpath  = "github.com/mattmoor/go-workqueue/cmd/receiver"
+        importpath  = "github.com/chainguard-dev/go-workqueue/cmd/receiver"
       }
       resources = {
         limits = {
