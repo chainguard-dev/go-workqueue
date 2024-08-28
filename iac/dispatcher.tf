@@ -20,7 +20,7 @@ module "dispatcher-calls-target" {
   for_each = var.regions
 
   source  = "chainguard-dev/common/infra//modules/authorize-private-service"
-  version = "0.6.65"
+  version = "0.6.73"
 
   project_id = var.project_id
   region     = each.key
@@ -32,7 +32,7 @@ module "dispatcher-calls-target" {
 // Stand up the dispatcher service in each of our regions.
 module "dispatcher-service" {
   source     = "chainguard-dev/common/infra//modules/regional-go-service"
-  version    = "0.6.65"
+  version    = "0.6.73"
   project_id = var.project_id
   name       = "${var.name}-dsp"
   regions    = var.regions
@@ -100,7 +100,7 @@ module "cron-trigger-calls-dispatcher" {
   for_each = var.regions
 
   source  = "chainguard-dev/common/infra//modules/authorize-private-service"
-  version = "0.6.65"
+  version = "0.6.73"
 
   project_id = var.project_id
   region     = each.key
@@ -171,7 +171,7 @@ module "change-trigger-calls-dispatcher" {
   for_each = var.regions
 
   source  = "chainguard-dev/common/infra//modules/authorize-private-service"
-  version = "0.6.65"
+  version = "0.6.73"
 
   project_id = var.project_id
   region     = each.key
