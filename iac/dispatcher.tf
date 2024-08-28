@@ -102,6 +102,8 @@ module "cron-trigger-calls-dispatcher" {
   source  = "chainguard-dev/common/infra//modules/authorize-private-service"
   version = "0.6.73"
 
+  depends_on = [ module.dispatcher-service ]
+
   project_id = var.project_id
   region     = each.key
   name       = "${var.name}-dsp"
@@ -172,6 +174,8 @@ module "change-trigger-calls-dispatcher" {
 
   source  = "chainguard-dev/common/infra//modules/authorize-private-service"
   version = "0.6.73"
+
+  depends_on = [ module.dispatcher-service ]
 
   project_id = var.project_id
   region     = each.key
