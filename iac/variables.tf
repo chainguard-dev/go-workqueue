@@ -26,6 +26,9 @@ variable "reconciler-service" {
   })
 }
 
-// TODO(mattmoor): Allow passing labels through.
+variable "notification_channels" {
+  description = "List of notification channels to alert."
+  type        = list(string)
+}
 
-// TODO(mattmoor): Allow passing notification channels through.
+// TODO(mattmoor): Allow passing labels through.

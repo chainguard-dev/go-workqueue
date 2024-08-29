@@ -58,5 +58,5 @@ module "receiver-service" {
     }
   }
 
-  notification_channels = [] // TODO(mattmoor): var.notification_channels
+  notification_channels = var.notification_channels
 }

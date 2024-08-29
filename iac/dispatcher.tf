@@ -75,7 +75,7 @@ module "dispatcher-service" {
     }
   }
 
-  notification_channels = [] // TODO(mattmoor): var.notification_channels
+  notification_channels = var.notification_channels
 }
 
 // Compute a suffix that satisfies the regex:
