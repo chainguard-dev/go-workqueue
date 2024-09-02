@@ -1,11 +1,11 @@
 module "width" {
   source  = "chainguard-dev/common/infra//modules/dashboard/sections/width"
-  version = "0.6.73"
+  version = "0.6.75"
 }
 
 module "receiver-logs" {
   source  = "chainguard-dev/common/infra//modules/dashboard/sections/logs"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title  = "Receiver Logs"
   filter = ["resource.type=\"cloud_run_revision\"", "resource.labels.service_name=\"${var.name}-rcv\""]
@@ -13,7 +13,7 @@ module "receiver-logs" {
 
 module "dispatcher-logs" {
   source  = "chainguard-dev/common/infra//modules/dashboard/sections/logs"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title  = "Dispatcher Logs"
   filter = ["resource.type=\"cloud_run_revision\"", "resource.labels.service_name=\"${var.name}-dsp\""]
@@ -21,7 +21,7 @@ module "dispatcher-logs" {
 
 module "work-in-progress" {
   source  = "chainguard-dev/common/infra//modules/dashboard/widgets/xy"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title  = "Amount of work in progress"
   filter = [
@@ -39,7 +39,7 @@ module "work-in-progress" {
 
 module "work-queued" {
   source  = "chainguard-dev/common/infra//modules/dashboard/widgets/xy"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title  = "Amount of work queued"
   filter = [
@@ -54,7 +54,7 @@ module "work-queued" {
 
 module "work-added" {
   source  = "chainguard-dev/common/infra//modules/dashboard/widgets/xy"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title  = "Amount of work added"
   filter = [
@@ -71,7 +71,7 @@ module "work-added" {
 
 module "process-latency" {
   source  = "chainguard-dev/common/infra//modules/dashboard/widgets/latency"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title  = "Work processing latency"
   filter = [
@@ -83,7 +83,7 @@ module "process-latency" {
 
 module "wait-latency" {
   source  = "chainguard-dev/common/infra//modules/dashboard/widgets/latency"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title  = "Work wait times"
   filter = [
@@ -95,7 +95,7 @@ module "wait-latency" {
 
 module "percent-deduped" {
   source  = "chainguard-dev/common/infra//modules/dashboard/widgets/xy-ratio"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title     = "Percentage of work deduplicated"
   legend    = ""
@@ -178,7 +178,7 @@ locals {
 
 module "collapsible" {
   source  = "chainguard-dev/common/infra//modules/dashboard/sections/collapsible"
-  version = "0.6.73"
+  version = "0.6.75"
 
   title     = "Workqueue State"
   tiles     = local.tiles
@@ -187,7 +187,7 @@ module "collapsible" {
 
 module "layout" {
   source  = "chainguard-dev/common/infra//modules/dashboard/sections/layout"
-  version = "0.6.73"
+  version = "0.6.75"
 
   sections = [
     module.collapsible.section,
