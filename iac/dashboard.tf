@@ -33,8 +33,7 @@ module "work-in-progress" {
   primary_align   = "ALIGN_MAX"
   primary_reduce  = "REDUCE_MAX"
 
-  # TODO(mattmoor): Add threshold when it lands in a release.
-  # thresholds = [var.concurrent-work]
+  thresholds = [var.concurrent-work]
 }
 
 module "work-queued" {
